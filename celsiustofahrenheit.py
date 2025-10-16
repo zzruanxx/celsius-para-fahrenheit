@@ -1,10 +1,16 @@
-import tkinter as tk
-from tkinter import ttk
+import customtkinter as ctk
+from tkinter import messagebox
+
+ctk.set_appearance_mode("System")  # Modo de aparência inicial (System, Dark, Light)
+ctk.set_default_color_theme("dark-blue")  # Tema de cor
 
 class ConversorTemperatura:
     def __init__(self, root):
         self.root = root
         self.root.title("Conversor de Temperatura")
+        self.root.geometry("450x400")
+        self.root.resizable(False, False)
+        self.historico = []  # Lista para armazenar histórico de conversões
         self.setup_ui()
 
     def celsius_para_fahrenheit(self, celsius):
@@ -25,55 +31,97 @@ class ConversorTemperatura:
 
     def converter(self):
         entrada = self.entry_temperatura.get()
-        entrada = entrada.strip()  # Limpeza de entrada: remove espaços em branco
+        entrada = entrada.strip()
+        self.entry_temperatura.configure(fg_color="white" if ctk.get_appearance_mode() == "Light" else "#2b2b2b")  # Resetar cor
         if not self.validar_entrada(entrada):
-            self.resultado_var.set("Erro: Digite um número válido")
+            messagebox.showerror("Erro", "Por favor, digite um número válido (ex.: 25 ou -10.5).")
+            self.entry_temperatura.configure(fg_color="lightcoral")
             return
-        temp = float(entrada)  # Removido try desnecessário, pois validar_entrada já garante que é um número
-        # Validação física de temperatura
+        temp = float(entrada)
         if self.escolha_var.get() == "C para F" and temp < -273.15:
-            self.resultado_var.set("Erro: Temperatura em Celsius não pode ser inferior a -273.15°C (zero absoluto)")
+            messagebox.showerror("Erro", "Temperatura em Celsius não pode ser inferior a -273.15°C (zero absoluto).")
+            self.entry_temperatura.configure(fg_color="lightcoral")
             return
         elif self.escolha_var.get() == "F para C" and temp < -459.67:
-            self.resultado_var.set("Erro: Temperatura em Fahrenheit não pode ser inferior a -459.67°F (zero absoluto)")
+            messagebox.showerror("Erro", "Temperatura em Fahrenheit não pode ser inferior a -459.67°F (zero absoluto).")
+            self.entry_temperatura.configure(fg_color="lightcoral")
             return
         if self.escolha_var.get() == "C para F":
             resultado = self.celsius_para_fahrenheit(temp)
-            self.resultado_var.set(f"{temp}°C é igual a {resultado:.2f}°F")
+            msg = f"{temp}°C é igual a {resultado:.2f}°F"
         elif self.escolha_var.get() == "F para C":
             resultado = self.fahrenheit_para_celsius(temp)
-            self.resultado_var.set(f"{temp}°F é igual a {resultado:.2f}°C")
+            msg = f"{temp}°F é igual a {resultado:.2f}°C"
         else:
-            self.resultado_var.set("Erro: Escolha uma conversão válida")
+            messagebox.showerror("Erro", "Selecione uma opção de conversão válida.")
+            return
+        self.resultado_var.set(msg)
+        self.adicionar_historico(msg)
+
+    def adicionar_historico(self, msg):
+        """Adiciona conversão ao histórico e atualiza a lista."""
+        self.historico.append(msg)
+        if len(self.historico) > 5:  # Manter apenas últimas 5
+            self.historico.pop(0)
+        self.historico_listbox.delete(0, ctk.END)
+        for item in self.historico:
+            self.historico_listbox.insert(ctk.END, item)
+
+    def limpar(self):
+        """Limpa entrada, resultado e histórico."""
+        self.entry_temperatura.delete(0, ctk.END)
+        self.resultado_var.set("")
+        self.entry_temperatura.configure(fg_color="white" if ctk.get_appearance_mode() == "Light" else "#2b2b2b")
+        self.historico.clear()
+        self.historico_listbox.delete(0, ctk.END)
+
+    def alternar_tema(self):
+        """Alterna entre modo claro e escuro."""
+        modo_atual = ctk.get_appearance_mode()
+        novo_modo = "Dark" if modo_atual == "Light" else "Light"
+        ctk.set_appearance_mode(novo_modo)
+        self.entry_temperatura.configure(fg_color="white" if novo_modo == "Light" else "#2b2b2b")
 
     def enter_press(self, event):
         self.converter()
 
     def setup_ui(self):
-        # Configurações de layout
-        self.root.columnconfigure(0, weight=1)
-        self.root.columnconfigure(1, weight=1)
-        self.root.rowconfigure(3, weight=1)
+        # Frame principal
+        main_frame = ctk.CTkFrame(self.root)
+        main_frame.pack(fill=ctk.BOTH, expand=True, padx=20, pady=20)
 
-        ttk.Label(self.root, text="Escolha a conversão:").grid(column=0, row=0, padx=10, pady=10, sticky="w")
-        self.escolha_var = tk.StringVar()
-        self.escolha_combobox = ttk.Combobox(self.root, textvariable=self.escolha_var)  # Corrigido: escolha_combox para escolha_combobox
-        self.escolha_combobox['values'] = ("C para F", "F para C")
-        self.escolha_combobox.grid(column=1, row=0, padx=10, pady=10, sticky="ew")
+        # Título
+        ctk.CTkLabel(main_frame, text="Conversor de Temperatura", font=ctk.CTkFont(size=18, weight="bold")).pack(pady=10)
 
-        ttk.Label(self.root, text="Digite a temperatura:").grid(column=0, row=1, padx=10, pady=10, sticky="w")
-        self.entry_temperatura = tk.Entry(self.root)
-        self.entry_temperatura.grid(column=1, row=1, padx=10, pady=10, sticky="ew")
+        # Seleção de conversão
+        ctk.CTkLabel(main_frame, text="Escolha a conversão:").pack(pady=5)
+        self.escolha_var = ctk.StringVar(value="C para F")
+        self.escolha_combobox = ctk.CTkComboBox(main_frame, variable=self.escolha_var, values=["C para F", "F para C"])
+        self.escolha_combobox.pack(pady=5)
+
+        # Entrada de temperatura
+        ctk.CTkLabel(main_frame, text="Digite a temperatura:").pack(pady=5)
+        self.entry_temperatura = ctk.CTkEntry(main_frame, placeholder_text="Ex.: 25")
+        self.entry_temperatura.pack(pady=5)
         self.entry_temperatura.bind("<Return>", self.enter_press)
 
-        self.botao_converter = ttk.Button(self.root, text="Converter", command=self.converter)
-        self.botao_converter.grid(column=0, row=2, columnspan=2, padx=10, pady=10)
+        # Botões
+        button_frame = ctk.CTkFrame(main_frame, fg_color="transparent")
+        button_frame.pack(pady=10)
+        ctk.CTkButton(button_frame, text="Converter", command=self.converter).pack(side=ctk.LEFT, padx=5)
+        ctk.CTkButton(button_frame, text="Limpar", command=self.limpar).pack(side=ctk.LEFT, padx=5)
+        ctk.CTkButton(button_frame, text="Alternar Tema", command=self.alternar_tema).pack(side=ctk.LEFT, padx=5)
 
-        self.resultado_var = tk.StringVar()
-        self.resultado_label = ttk.Label(self.root, textvariable=self.resultado_var)
-        self.resultado_label.grid(column=0, row=3, columnspan=2, padx=10, pady=10, sticky="nsew")
+        # Resultado
+        self.resultado_var = ctk.StringVar()
+        ctk.CTkLabel(main_frame, textvariable=self.resultado_var, wraplength=400).pack(pady=10)
+
+        # Histórico
+        ctk.CTkLabel(main_frame, text="Histórico (últimas 5 conversões):").pack(pady=5)
+        self.historico_listbox = ctk.CTkScrollableFrame(main_frame, height=100)
+        self.historico_listbox.pack(fill=ctk.X, padx=10, pady=5)
 
 if __name__ == "__main__":
-    root = tk.Tk()
+    root = ctk.CTk()
     app = ConversorTemperatura(root)
     root.mainloop()
