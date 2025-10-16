@@ -25,21 +25,26 @@ class ConversorTemperatura:
 
     def converter(self):
         entrada = self.entry_temperatura.get()
+        entrada = entrada.strip()  # Limpeza de entrada: remove espaços em branco
         if not self.validar_entrada(entrada):
             self.resultado_var.set("Erro: Digite um número válido")
             return
-        try:
-            temp = float(entrada)
-            if self.escolha_var.get() == "C para F":
-                resultado = self.celsius_para_fahrenheit(temp)
-                self.resultado_var.set(f"{temp}°C é igual a {resultado:.2f}°F")
-            elif self.escolha_var.get() == "F para C":
-                resultado = self.fahrenheit_para_celsius(temp)
-                self.resultado_var.set(f"{temp}°F é igual a {resultado:.2f}°C")
-            else:
-                self.resultado_var.set("Erro: Escolha uma conversão válida")
-        except Exception as e:
-            self.resultado_var.set(f"Erro inesperado: {str(e)}")
+        temp = float(entrada)  # Removido try desnecessário, pois validar_entrada já garante que é um número
+        # Validação física de temperatura
+        if self.escolha_var.get() == "C para F" and temp < -273.15:
+            self.resultado_var.set("Erro: Temperatura em Celsius não pode ser inferior a -273.15°C (zero absoluto)")
+            return
+        elif self.escolha_var.get() == "F para C" and temp < -459.67:
+            self.resultado_var.set("Erro: Temperatura em Fahrenheit não pode ser inferior a -459.67°F (zero absoluto)")
+            return
+        if self.escolha_var.get() == "C para F":
+            resultado = self.celsius_para_fahrenheit(temp)
+            self.resultado_var.set(f"{temp}°C é igual a {resultado:.2f}°F")
+        elif self.escolha_var.get() == "F para C":
+            resultado = self.fahrenheit_para_celsius(temp)
+            self.resultado_var.set(f"{temp}°F é igual a {resultado:.2f}°C")
+        else:
+            self.resultado_var.set("Erro: Escolha uma conversão válida")
 
     def enter_press(self, event):
         self.converter()
@@ -52,9 +57,9 @@ class ConversorTemperatura:
 
         ttk.Label(self.root, text="Escolha a conversão:").grid(column=0, row=0, padx=10, pady=10, sticky="w")
         self.escolha_var = tk.StringVar()
-        self.escolha_combox = ttk.Combobox(self.root, textvariable=self.escolha_var)
-        self.escolha_combox['values'] = ("C para F", "F para C")
-        self.escolha_combox.grid(column=1, row=0, padx=10, pady=10, sticky="ew")
+        self.escolha_combobox = ttk.Combobox(self.root, textvariable=self.escolha_var)  # Corrigido: escolha_combox para escolha_combobox
+        self.escolha_combobox['values'] = ("C para F", "F para C")
+        self.escolha_combobox.grid(column=1, row=0, padx=10, pady=10, sticky="ew")
 
         ttk.Label(self.root, text="Digite a temperatura:").grid(column=0, row=1, padx=10, pady=10, sticky="w")
         self.entry_temperatura = tk.Entry(self.root)
