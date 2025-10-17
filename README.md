@@ -3,7 +3,11 @@
 Um aplicativo simples em Python usando Tkinter para converter temperaturas entre Celsius e Fahrenheit.
 
 ## Funcionalidades
-- Conversão bidirecional: Celsius para Fahrenheit e vice-versa.
+- Conversão bidirecional com validações físicas.
+- Histórico de conversões.
+- Alternância de tema claro/escuro.
+- Copiar resultado para área de transferência.
+- Feedback visual e tooltips.
 - Validação de entrada: Apenas números são aceitos.
 - Validação física: Impede temperaturas abaixo do zero absoluto.
 - Interface amigável com feedback visual para erros.
