@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversor de Temperatura</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .resultado {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #e7f3e7;
+            border: 1px solid #4CAF50;
+            border-radius: 4px;
+        }
+        .historico {
+            margin-top: 20px;
+        }
+        .historico ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .historico li {
+            background-color: #f9f9f9;
+            padding: 5px;
+            margin-bottom: 5px;
+            border-radius: 4px;
+        }
+        .flash {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .flash.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .flash.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .flash.warning {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        .flash.info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Conversor de Temperatura</h1>
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        <form method="POST">
+            <label for="escolha">Escolha a conversão:</label>
+            <select name="escolha" id="escolha">
+                <option value="C para F" {% if request.form.escolha == 'C para F' or not request.form.escolha %}selected{% endif %}>Celsius para Fahrenheit</option>
+                <option value="F para C" {% if request.form.escolha == 'F para C' %}selected{% endif %}>Fahrenheit para Celsius</option>
+            </select>
+            
+            <label for="temperatura">Digite a temperatura:</label>
+            <input type="text" name="temperatura" id="temperatura" placeholder="Ex.: 25" value="{{ request.form.temperatura or '' }}" required>
+            
+            <button type="submit">Converter</button>
+        </form>
+        
+        {% if resultado is not none %}
+        <div class="resultado">
+            <strong>Resultado:</strong> {{ "%.2f"|format(resultado) }}
+        </div>
+        {% endif %}
+        
+        <div class="historico">
+            <h3>Histórico (últimas 5 conversões):</h3>
+            {% if historico %}
+                <ul>
+                    {% for item in historico %}
+                        <li>{{ item }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>Nenhuma conversão realizada ainda.</p>
+            {% endif %}
+        </div>
+        
+        <a href="{{ url_for('limpar') }}">Limpar Histórico</a>
+    </div>
+</body>
+</html>
