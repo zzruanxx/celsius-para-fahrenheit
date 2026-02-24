@@ -7,185 +7,339 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         body {
-            font-family: 'Roboto', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
+            overflow: hidden;
         }
+
+        /* Animated background */
+        .bg-animation {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        .bg-animation .bubble {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.15;
+            animation: rise linear infinite;
+        }
+        .bg-animation .bubble:nth-child(1) {
+            width: 80px; height: 80px;
+            background: #667eea;
+            left: 10%; bottom: -100px;
+            animation-duration: 12s; animation-delay: 0s;
+            opacity: 0.2;
+        }
+        .bg-animation .bubble:nth-child(2) {
+            width: 140px; height: 140px;
+            background: #764ba2;
+            left: 25%; bottom: -160px;
+            animation-duration: 16s; animation-delay: 2s;
+            opacity: 0.18;
+        }
+        .bg-animation .bubble:nth-child(3) {
+            width: 60px; height: 60px;
+            background: #a78bfa;
+            left: 45%; bottom: -80px;
+            animation-duration: 10s; animation-delay: 4s;
+            opacity: 0.22;
+        }
+        .bg-animation .bubble:nth-child(4) {
+            width: 200px; height: 200px;
+            background: #667eea;
+            left: 65%; bottom: -220px;
+            animation-duration: 20s; animation-delay: 1s;
+            opacity: 0.12;
+        }
+        .bg-animation .bubble:nth-child(5) {
+            width: 100px; height: 100px;
+            background: #c084fc;
+            left: 80%; bottom: -120px;
+            animation-duration: 14s; animation-delay: 3s;
+            opacity: 0.2;
+        }
+        .bg-animation .bubble:nth-child(6) {
+            width: 50px; height: 50px;
+            background: #818cf8;
+            left: 5%; bottom: -60px;
+            animation-duration: 9s; animation-delay: 5s;
+            opacity: 0.25;
+        }
+        .bg-animation .bubble:nth-child(7) {
+            width: 170px; height: 170px;
+            background: #764ba2;
+            left: 50%; bottom: -190px;
+            animation-duration: 18s; animation-delay: 0.5s;
+            opacity: 0.1;
+        }
+        .bg-animation .bubble:nth-child(8) {
+            width: 90px; height: 90px;
+            background: #a78bfa;
+            left: 35%; bottom: -100px;
+            animation-duration: 11s; animation-delay: 6s;
+            opacity: 0.2;
+        }
+        .bg-animation .bubble:nth-child(9) {
+            width: 120px; height: 120px;
+            background: #667eea;
+            left: 90%; bottom: -140px;
+            animation-duration: 15s; animation-delay: 2.5s;
+            opacity: 0.16;
+        }
+        .bg-animation .bubble:nth-child(10) {
+            width: 70px; height: 70px;
+            background: #c084fc;
+            left: 55%; bottom: -90px;
+            animation-duration: 13s; animation-delay: 7s;
+            opacity: 0.22;
+        }
+        @keyframes rise {
+            0% {
+                transform: translateY(0) rotate(0deg) scale(1);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.2;
+            }
+            90% {
+                opacity: 0.15;
+            }
+            100% {
+                transform: translateY(-110vh) rotate(360deg) scale(0.6);
+                opacity: 0;
+            }
+        }
+
         .container {
-            background-color: white;
+            background: rgba(255,255,255,0.12);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255,255,255,0.18);
             padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            max-width: 600px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.37);
+            max-width: 650px;
             width: 100%;
+            color: #fff;
         }
-        h1 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 30px;
-            font-weight: 700;
+        h1 { text-align: center; font-weight: 700; margin-bottom: 25px; }
+
+        /* Tabs */
+        .nav-tabs { border-bottom: 2px solid rgba(255,255,255,0.2); margin-bottom: 25px; }
+        .nav-tabs .nav-link {
+            color: rgba(255,255,255,0.6);
+            border: none;
+            font-weight: 600;
+            padding: 10px 20px;
+            border-radius: 10px 10px 0 0;
+            transition: .3s;
         }
-        .form-label {
-            font-weight: 500;
-            color: #555;
+        .nav-tabs .nav-link.active {
+            background: rgba(255,255,255,0.15);
+            color: #fff;
+            border-bottom: 3px solid #667eea;
         }
+        .nav-tabs .nav-link:hover { color: #fff; }
+
+        .form-label { font-weight: 500; color: rgba(255,255,255,0.85); }
         .form-control, .form-select {
             border-radius: 10px;
-            border: 2px solid #e9ecef;
+            border: 2px solid rgba(255,255,255,0.2);
             padding: 12px;
             font-size: 16px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
         }
+        .form-control::placeholder { color: rgba(255,255,255,0.4); }
         .form-control:focus, .form-select:focus {
             border-color: #667eea;
-            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+            box-shadow: 0 0 0 0.2rem rgba(102,126,234,0.35);
+            background: rgba(255,255,255,0.15);
+            color: #fff;
         }
+        .form-select option { color: #333; background: #fff; }
+
         .btn-primary {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border: none;
-            border-radius: 10px;
-            padding: 12px;
-            font-size: 18px;
-            font-weight: 500;
-            width: 100%;
+            border: none; border-radius: 10px; padding: 12px;
+            font-size: 18px; font-weight: 500; width: 100%;
             transition: transform 0.2s;
         }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
-        }
+        .btn-primary:hover { transform: translateY(-2px); background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%); }
+
         .resultado {
-            margin-top: 30px;
-            padding: 20px;
-            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
-            border: 1px solid #4CAF50;
-            border-radius: 10px;
-            text-align: center;
-            font-size: 24px;
-            font-weight: 500;
-            color: #155724;
+            margin-top: 25px; padding: 20px;
+            background: rgba(76,175,80,0.2); border: 1px solid #4CAF50;
+            border-radius: 12px; text-align: center;
+            font-size: 22px; font-weight: 600; color: #a5d6a7;
         }
-        .historico {
-            margin-top: 30px;
+
+        /* Weather card */
+        .weather-card {
+            margin-top: 25px; padding: 25px;
+            border-radius: 16px; text-align: center;
+            color: #fff; position: relative; overflow: hidden;
         }
-        .historico h3 {
-            color: #333;
-            font-weight: 600;
-            margin-bottom: 15px;
-        }
-        .historico ul {
-            list-style-type: none;
-            padding: 0;
-        }
+        .weather-card.sunny   { background: linear-gradient(135deg, #f6d365, #fda085); }
+        .weather-card.cloudy  { background: linear-gradient(135deg, #a1c4fd, #c2e9fb); color: #333; }
+        .weather-card.rainy   { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+        .weather-card.snowy   { background: linear-gradient(135deg, #e6e9f0, #eef1f5); color: #333; }
+        .weather-card.foggy   { background: linear-gradient(135deg, #bdc3c7, #a0aab4); color: #333; }
+        .weather-card.stormy  { background: linear-gradient(135deg, #434343, #000000); }
+        .weather-card.overcast{ background: linear-gradient(135deg, #7f8c8d, #95a5a6); }
+
+        .weather-icon { font-size: 56px; animation: float 3s ease-in-out infinite; }
+        @keyframes float { 0%,100%{ transform: translateY(0); } 50%{ transform: translateY(-10px); } }
+
+        .weather-city { font-size: 22px; font-weight: 700; margin-top: 8px; }
+        .weather-temp { font-size: 42px; font-weight: 700; }
+        .weather-details { display: flex; justify-content: center; gap: 20px; margin-top: 12px; font-size: 14px; font-weight: 500; }
+
+        .historico { margin-top: 30px; }
+        .historico h3 { font-weight: 600; margin-bottom: 15px; font-size: 18px; }
         .historico li {
-            background-color: #f8f9fa;
-            padding: 10px 15px;
-            margin-bottom: 8px;
-            border-radius: 8px;
-            border-left: 4px solid #667eea;
+            background: rgba(255,255,255,0.08);
+            padding: 10px 15px; margin-bottom: 8px;
+            border-radius: 8px; border-left: 4px solid #667eea;
+            color: rgba(255,255,255,0.85);
         }
-        .flash {
-            margin-bottom: 20px;
-            padding: 15px;
-            border-radius: 10px;
-            font-weight: 500;
-        }
-        .flash.success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-        .flash.error {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-        .flash.warning {
-            background-color: #fff3cd;
-            color: #856404;
-            border: 1px solid #ffeaa7;
-        }
-        .flash.info {
-            background-color: #d1ecf1;
-            color: #0c5460;
-            border: 1px solid #bee5eb;
-        }
-        .btn-link {
-            color: #667eea;
-            text-decoration: none;
-            font-weight: 500;
-        }
-        .btn-link:hover {
-            color: #5a6fd8;
-            text-decoration: underline;
-        }
-        .icon {
-            margin-right: 8px;
-        }
+        .text-muted { color: rgba(255,255,255,0.45) !important; }
+
+        .flash { margin-bottom: 15px; padding: 12px 15px; border-radius: 10px; font-weight: 500; font-size: 14px; }
+        .flash.success { background: rgba(76,175,80,0.2); color: #a5d6a7; border: 1px solid rgba(76,175,80,0.4); }
+        .flash.error   { background: rgba(244,67,54,0.2); color: #ef9a9a; border: 1px solid rgba(244,67,54,0.4); }
+        .flash.warning { background: rgba(255,193,7,0.2); color: #ffe082; border: 1px solid rgba(255,193,7,0.4); }
+        .flash.info    { background: rgba(33,150,243,0.2); color: #90caf9; border: 1px solid rgba(33,150,243,0.4); }
+
+        .btn-link { color: #90caf9; text-decoration: none; font-weight: 500; }
+        .btn-link:hover { color: #fff; text-decoration: underline; }
+        .icon { margin-right: 8px; }
     </style>
 </head>
 <body>
+    <div class="bg-animation">
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+    </div>
+
     <div class="container">
         <h1><i class="fas fa-thermometer-half icon"></i>Conversor de Temperatura</h1>
-        
+
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
-                    <div class="flash {{ category }} alert alert-{{ 'success' if category == 'success' else 'danger' if category == 'error' else 'warning' if category == 'warning' else 'info' }}">{{ message }}</div>
+                    <div class="flash {{ category }}">{{ message }}</div>
                 {% endfor %}
             {% endif %}
         {% endwith %}
-        
-        <form method="POST" class="mb-4">
-            <div class="mb-3">
-                <label for="escolha" class="form-label"><i class="fas fa-exchange-alt icon"></i>Escolha a conversão:</label>
-                <select name="escolha" id="escolha" class="form-select">
-                    <option value="C para F" {% if request.form.escolha == 'C para F' or not request.form.escolha %}selected{% endif %}>Celsius para Fahrenheit</option>
-                    <option value="F para C" {% if request.form.escolha == 'F para C' %}selected{% endif %}>Fahrenheit para Celsius</option>
-                </select>
+
+        <!-- Abas -->
+        <ul class="nav nav-tabs" id="mainTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link {% if not weather %}active{% endif %}" id="converter-tab" data-bs-toggle="tab" data-bs-target="#converter" type="button" role="tab">
+                    <i class="fas fa-exchange-alt icon"></i>Converter
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link {% if weather %}active{% endif %}" id="clima-tab" data-bs-toggle="tab" data-bs-target="#clima" type="button" role="tab">
+                    <i class="fas fa-cloud-sun icon"></i>Clima por Local
+                </button>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="mainTabContent">
+            <!-- Aba Converter -->
+            <div class="tab-pane fade {% if not weather %}show active{% endif %}" id="converter" role="tabpanel">
+                <form method="POST" class="mb-3">
+                    <div class="mb-3">
+                        <label for="escolha" class="form-label"><i class="fas fa-exchange-alt icon"></i>Escolha a conversão:</label>
+                        <select name="escolha" id="escolha" class="form-select">
+                            <option value="C para F" {% if request.form.escolha == 'C para F' or not request.form.escolha %}selected{% endif %}>Celsius → Fahrenheit</option>
+                            <option value="F para C" {% if request.form.escolha == 'F para C' %}selected{% endif %}>Fahrenheit → Celsius</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="temperatura" class="form-label"><i class="fas fa-temperature-high icon"></i>Digite a temperatura:</label>
+                        <input type="text" name="temperatura" id="temperatura" class="form-control" placeholder="Ex.: 25" value="{{ request.form.temperatura or '' }}" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-calculator icon"></i>Converter</button>
+                </form>
+
+                {% if resultado is not none %}
+                <div class="resultado">
+                    <i class="fas fa-check-circle icon"></i><strong>Resultado:</strong> {{ "%.2f"|format(resultado) }}
+                </div>
+                {% endif %}
+
+                <div class="historico">
+                    <h3><i class="fas fa-history icon"></i>Histórico (últimas 5 conversões):</h3>
+                    {% if historico %}
+                        <ul class="list-unstyled">
+                            {% for item in historico %}
+                                <li>{{ item }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="text-muted">Nenhuma conversão realizada ainda.</p>
+                    {% endif %}
+                </div>
+
+                <div class="text-center mt-3">
+                    <a href="{{ url_for('limpar') }}" class="btn btn-link"><i class="fas fa-trash icon"></i>Limpar Histórico</a>
+                </div>
             </div>
-            
-            <div class="mb-3">
-                <label for="temperatura" class="form-label"><i class="fas fa-temperature-high icon"></i>Digite a temperatura:</label>
-                <input type="text" name="temperatura" id="temperatura" class="form-control" placeholder="Ex.: 25" value="{{ request.form.temperatura or '' }}" required>
+
+            <!-- Aba Clima -->
+            <div class="tab-pane fade {% if weather %}show active{% endif %}" id="clima" role="tabpanel">
+                <form method="POST" class="mb-3">
+                    <div class="mb-3">
+                        <label for="cidade" class="form-label"><i class="fas fa-map-marker-alt icon"></i>Digite o nome da cidade:</label>
+                        <input type="text" name="cidade" id="cidade" class="form-control" placeholder="Ex.: São Paulo, Tokyo, London" value="{{ request.form.cidade or '' }}" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-search icon"></i>Buscar</button>
+                </form>
+
+                {% if weather %}
+                {% set icon, label, theme = weather_icon_and_label(weather.weather_code) %}
+                <div class="weather-card {{ theme }}">
+                    <div class="weather-icon"><i class="fas {{ icon }}"></i></div>
+                    <div class="weather-city">{{ weather.city }}{% if weather.admin1 %}, {{ weather.admin1 }}{% endif %} — {{ weather.country }}</div>
+                    <div style="font-size:14px; margin-top:4px;">{{ label }}</div>
+                    <div class="weather-temp">{{ weather.temp_c }}°C <span style="font-size:22px;">/ {{ weather.temp_f }}°F</span></div>
+                    <div class="weather-details">
+                        <span><i class="fas fa-temperature-low"></i> Sensação: {{ weather.apparent_c }}°C / {{ weather.apparent_f }}°F</span>
+                    </div>
+                    <div class="weather-details">
+                        <span><i class="fas fa-tint"></i> Umidade: {{ weather.humidity }}%</span>
+                        <span><i class="fas fa-wind"></i> Vento: {{ weather.wind_speed }} km/h</span>
+                    </div>
+                </div>
+                {% endif %}
             </div>
-            
-            <button type="submit" class="btn btn-primary"><i class="fas fa-calculator icon"></i>Converter</button>
-        </form>
-        
-        {% if resultado is not none %}
-        <div class="resultado">
-            <i class="fas fa-check-circle icon"></i><strong>Resultado:</strong> {{ "%.2f"|format(resultado) }}
-        </div>
-        {% endif %}
-        
-        <div class="historico">
-            <h3><i class="fas fa-history icon"></i>Histórico (últimas 5 conversões):</h3>
-            {% if historico %}
-                <ul class="list-group">
-                    {% for item in historico %}
-                        <li class="list-group-item">{{ item }}</li>
-                    {% endfor %}
-                </ul>
-            {% else %}
-                <p class="text-muted">Nenhuma conversão realizada ainda.</p>
-            {% endif %}
-        </div>
-        
-        <div class="text-center mt-4">
-            <a href="{{ url_for('limpar') }}" class="btn btn-link"><i class="fas fa-trash icon"></i>Limpar Histórico</a>
         </div>
     </div>
 
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
